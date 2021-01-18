@@ -6,7 +6,6 @@ function getCurrentTimestamp() { return Math.floor(new Date().getTime() / 864000
 
 function tracker_saveevent(eventid, puser, passwd, ename, etype, emin, emax, edefault, fnsuccess, ...args) {
   var xhr = new XMLHttpRequest();
-  var ts = Math.ceil((Date.now() / 86400000).toFixed(1) - 0.9);
   xhr.onreadystatechange = function(e) {
     if (xhr.status == 200 && xhr.readyState == 4) {
       fnsuccess(...args);
@@ -53,7 +52,6 @@ function tracker_loadevents(fnsuccess, ...args) {
 
 function tracker_loaddata(dayindex, fnsuccess, ...args) {
   var xhr = new XMLHttpRequest();
-  var ts = dayindex;
   xhr.onreadystatechange = function(e) {
     if (xhr.status == 200 && xhr.readyState == 4) {
       fnsuccess(xhr.responseText, ...args);

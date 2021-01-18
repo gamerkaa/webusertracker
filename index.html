@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" encoding="utf-8">
+    <head>
+        <title>webusertracker utility</title>
+        <script language="javascript" src="webusertracker.js"></script>
+        <style>
+            form {
+                float: left;
+                clear: none;
+            }
+            .wut-form div {
+                width: 500px;
+                padding: 5px;
+                border: 1px solid black;
+            }
+            .wut-form div label {
+                width: 190px;
+                margin: 10px 5px;
+            }
+            .wut-form div input {
+                width: 290px;
+                margin: 10px 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <form name="frmSaveEvent">
+            <div class="wut-form">
+                <div>
+                    <h1>Tracker Add Event</h1>
+                    <hr/>
+                </div>
+                <div>
+                    <label for="wut_eventid">Event ID</label>
+                    <input name="wut_eventid" type="text"/>
+                </div>
+                <div>
+                    <label for="wut_puser">Username</label>
+                    <input name="wut_puser" type="text"/>
+                </div>
+                <div>
+                    <label for="wut_passwd">Password</label>
+                    <input name="wut_passwd" type="password"/>
+                </div>
+                <div>
+                    <label for="wut_ename">Event Name</label>
+                    <input name="wut_ename" type="text"/>
+                </div>
+                <div>
+                    <label for="wut_etype">Event Type</label>
+                    <input name="wut_etype" type="text"/>
+                </div>
+                <div>
+                    <label for="wut_emin">Minimum Value</label>
+                    <input name="wut_emin" type="number"/>
+                </div>
+                <div>
+                    <label for="wut_emax">Maximum Value</label>
+                    <input name="wut_emax" type="number"/>
+                </div>
+                <div>
+                    <label for="wut_edefault">Default Value</label>
+                    <input name="wut_edefault" type="number"/>
+                </div>
+                <div>
+                    <button name="btnAdd" type="button" onclick="javascript:addTrackerEvent()">Add</button>
+                    <button name="btnList" type="button" onclick="javascript:listTrackerEvents()">List</button>
+                </div>
+            </div>
+        </form>
+        <form name="frmSaveData">
+            <div class="wut-form">
+                <div>
+                    <h1>Tracker Add Data</h1>
+                    <hr/>
+                </div>
+                <div>
+                    <label for="wut_eventid">Event ID</label>
+                    <input name="wut_eventid" type="text"/>
+                </div>
+                <div>
+                    <label for="wut_puser">Username</label>
+                    <input name="wut_puser" type="text"/>
+                </div>
+                <div>
+                    <label for="wut_ename">Event Name</label>
+                    <input name="wut_ename" type="text"/>
+                </div>
+                <div>
+                    <label for="wut_evalue">Value</label>
+                    <input name="wut_evalue" type="number"/>
+                </div>
+                <div>
+                    <button name="btnAddData" type="button" onclick="javascript:addTrackerData()">Add</button>
+                    <button name="btnListData" type="button" onclick="javascript:listTrackerData()">List</button>
+                </div>
+            </div>
+        </form>
+        <script language="javascript">
+            setTrackerPHP('webusertracker.php');
+            function addTrackerEvent() {
+                tracker_saveevent(document.frmSaveEvent.wut_eventid.value,
+                    document.frmSaveEvent.wut_puser.value,
+                    document.frmSaveEvent.wut_passwd.value,
+                    document.frmSaveEvent.wut_ename.value,
+                    document.frmSaveEvent.wut_etype.value,
+                    document.frmSaveEvent.wut_emin.value,
+                    document.frmSaveEvent.wut_emax.value,
+                    document.frmSaveEvent.wut_edefault.value,
+                    function() { alert('Saved Event'); }
+                ) 
+            }
+            function listTrackerEvents() {
+                tracker_loadevents(
+                    function(resText) {
+                        alert(resText);
+                    }
+                );
+            }
+            function addTrackerData() {
+                tracker_savedata(document.frmSaveData.wut_eventid.value,
+                    document.frmSaveData.wut_puser.value,
+                    document.frmSaveData.wut_ename.value,
+                    document.frmSaveData.wut_evalue.value,
+                    function() { alert('Saved Event Data'); }
+                ) 
+            }
+            function listTrackerData() {
+                tracker_loaddata(
+                    getCurrentTimestamp(),
+                    function(resText) {
+                        alert(resText);
+                    }
+                );
+            }
+        </script>
+    </body>
+</html>
