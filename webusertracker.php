@@ -85,30 +85,46 @@ if ($target == 'trackerevent') {
     $rows = $db->resultSet();
     $output = NULL;
     header('Content-type: text/plain');
-    foreach ($rows as $row) {
-      $output = $row['eventid'] . ',' . $row['puser'] . ',' . $row['passwd'] . ',' . $row['evtname'] . ',' . $row['evttype'] . ',' . $row['evtmin'] . ',' . $row['evtmax'] . ',' . $row['evtdefault'] . "\r\n";
-      echo $output;
+    if ($rows) {
+      foreach ($rows as $row) {
+        $output = $row['eventid'] . ',' . $row['puser'] . ',' . $row['passwd'] . ',' . $row['evtname'] . ',' . $row['evttype'] . ',' . $row['evtmin'] . ',' . $row['evtmax'] . ',' . $row['evtdefault'] . "\r\n";
+        echo $output;
+      }
     }
   }
 } else if ($target == 'tracker') {
 
   /* Need to migrate save/load of trackerdata to database */
 
-  $eventid = $_POST['eventid'];
-  $puser = $_POST['puser'];
-  $pname = $_POST['pname'];
-  $pvalue = $_POST['pvalue'];
-
   if ($method == 'add') { 
+    $eventid = $_POST['eventid'];
+    $puser = $_POST['puser'];
+    $pname = $_POST['pname'];
+    $pvalue = $_POST['pvalue'];
     $ts = time();
     $tssec = $ts; // Previous impl got value from client
     $tsday = intval($tssec/86400);
-    //file_put_contents('../db/tracker_' . $tsday . '.txt', $eventid . ',' . $puser . ',' . $pname . ',' . $pvalue . ',' . $tssec . "\r\n", FILE_APPEND | LOCK_EX);
-    if (!$db->lastInsertId()) http_response_code(422);
+    $db->query("INSERT INTO tracker_eventdata(eventid,puser,pname,pvalue,ts)VALUES(:eventid,:puser,:pname,:pval,:ts)");
+    $db->bind(':eventid', $eventid);
+    $db->bind(':puser', $puser);
+    $db->bind(':pname', $pname);
+    $db->bind(':pval', $pvalue);
+    $db->bind(':ts', $tsday);
+    if ($db->single() && !$db->lastInsertId()) http_response_code(422);
     else header('Content-type: text/plain');
   } else if ($method == 'list') {
     header('Content-type: text/plain');
     $dayindex = $_POST['dayindex'];
-    //readfile('../db/tracker_' . $dayindex . '.txt');
-  }
+    $db->query("SELECT * FROM tracker_eventdata WHERE ts=:ts");
+    $db->bind(':ts', $dayindex);
+    $rows = $db->resultSet();
+    $output = NULL;
+    header('Content-type: text/plain');
+    if ($rows) {
+      foreach ($rows as $row) {
+        $output = $row['eventid'] . ',' . $row['puser'] . ',' . $row['pname'] . ',' . $row['pvalue'] . ',' . $row['ts'] . "\r\n";
+        echo $output;
+      }
+    }
+ }
 }
