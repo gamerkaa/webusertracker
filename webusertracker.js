@@ -36,6 +36,21 @@ function tracker_savedata(eventid, puser, pname, pvalue, fnsuccess, ...args) {
   xhr.send('target=tracker&method=add&eventid=' + encodeURIComponent(eventid) + '&puser=' + encodeURIComponent(puser) + '&pname=' + encodeURIComponent(pname) + '&pvalue=' + encodeURIComponent(pvalue) + '&ts=' + encodeURIComponent(ts));
 }
 
+function tracker_loadevents(fnsuccess, ...args) {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function(e) {
+    if (xhr.status == 200 && xhr.readyState == 4) {
+      fnsuccess(xhr.responseText, ...args);
+    } else if (xhr.status == 404 && xhr.readyState == 4) {
+      console.log('tracker_loadevents failed');
+    }
+  };
+
+  xhr.open('POST', trackerphp, true);
+  xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+  xhr.send('target=trackerevent&method=list');
+}
+
 function tracker_loaddata(dayindex, fnsuccess, ...args) {
   var xhr = new XMLHttpRequest();
   var ts = dayindex;

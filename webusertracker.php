@@ -5,18 +5,19 @@ header('Content-type: text/plain');
 $target = $_POST['target'];
 $method = $_POST['method'];
 if ($target == 'trackerevent') {
-  $eventid = $_POST['eventid'];
-  $puser = $_POST['puser'];
-  $passwd = $_POST['passwd'];
-  $evtname = $_POST['ename'];
-  $evttype = $_POST['etype'];
-  $evmin = $_POST['emin'];
-  $evmax = $_POST['emax'];
-  $evdefault = $_POST['edefault'];
-//  $$ts = $_POST['ts'];
-
   if ($method == 'add') {
+    $eventid = $_POST['eventid'];
+    $puser = $_POST['puser'];
+    $passwd = $_POST['passwd'];
+    $evtname = $_POST['ename'];
+    $evttype = $_POST['etype'];
+    $evmin = $_POST['emin'];
+    $evmax = $_POST['emax'];
+    $evdefault = $_POST['edefault'];
+  //  $$ts = $_POST['ts'];
     file_put_contents('../db/events.tracker', $eventid . ',' . $puser . ',' . $passwd . ',' . $evtname . ',' . $evttype . ',' . $evmain . ',' . $evmax . ',' . $evdeefault . "\r\n", FILE_APPEND | LOCK_EX);
+  } else if ($method == 'list') {
+    readfile('../db/events.tracker');
   }
 } else if ($target == 'tracker') {
   $eventid = $_POST['eventid'];
