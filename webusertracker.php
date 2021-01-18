@@ -93,9 +93,6 @@ if ($target == 'trackerevent') {
     }
   }
 } else if ($target == 'tracker') {
-
-  /* Need to migrate save/load of trackerdata to database */
-
   if ($method == 'add') { 
     $eventid = $_POST['eventid'];
     $puser = $_POST['puser'];
