@@ -1,4 +1,5 @@
 <?php
+/* Needs to be updated to use database */
 
 header('Content-type: text/plain');
 
