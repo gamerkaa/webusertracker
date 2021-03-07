@@ -1,9 +1,10 @@
 <?php
 
 require_once('./config.php');
-require_once('./Model.php');
+require_once('classes/Model.php');
+require_once('classes/WutModel.php');
 
-$db = new Model();
+$db = new WutModel();
 
 $target = $_POST['target'];
 $method = $_POST['method'];
